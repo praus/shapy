@@ -26,30 +26,6 @@ class TestCWCShaping(unittest2.TestCase, ShaperMixin, ServerMixin):
         ShaperMixin.setUp(self)
         
         ServerMixin.run_server(self)
-        
-        #class TestServer(SocketServer.TCPServer):
-        #    allow_reuse_address = True
-        #
-        #class TCPHandler(SocketServer.StreamRequestHandler):
-        #    def handle(self):
-        #        time_start = datetime.now()
-        #        buffer = bytearray()
-        #        red = 0
-        #        while red < TestCWCShaping.filesize:
-        #            r = self.request.recv(TestCWCShaping.batchsize)
-        #            buffer.extend(r)
-        #            red += len(r)
-        #            #print r.encode('hex')
-        #        #print "STOP", red,
-        #        #import pdb; pdb.set_trace()
-        #        delta = datetime.now() - time_start
-        #        delay = delta.seconds + delta.microseconds/float(10**6)
-        #        print delay,
-        #
-        #self.ts = TestServer(self.server, TCPHandler)
-        #t = threading.Thread(target=self.ts.serve_forever)
-        #t.setDaemon(True)
-        #t.start()
 
         with open('/dev/urandom', 'rb') as f:
              self.randomfile = bytearray(f.read(self.filesize))
