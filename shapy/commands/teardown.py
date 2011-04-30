@@ -1,0 +1,1 @@
+TCInterfaceTeardown = "tc qdisc del dev {interface} {handle}"
