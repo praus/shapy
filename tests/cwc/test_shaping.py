@@ -17,7 +17,6 @@ from tests.utils import total_seconds
 
 class TestCWCShaping(unittest2.TestCase, ShaperMixin, ServerMixin):
     filesize = 2**19    # 0.5MB
-    batchsize = 2**12
     
     def setUp(self):
         self.server_addr = ('127.0.0.2', 55000)
@@ -91,9 +90,21 @@ class TestCWCShaping(unittest2.TestCase, ShaperMixin, ServerMixin):
                                          self.client_addr[0])
         self.assertAlmostEqual(delay, tt, delta=0.4)
         
-        s.close()
+        # statistics of qdiscs on IFB must correctly reflect the transmitted data
+        self._test_traffic()
         
-        print self.sh.get_traffic(self.client_addr[0])
+        s.close()
+    
+    def _test_traffic(self):
+        c = self.sh.get_traffic(self.client_addr[0])
+        s = self.sh.get_traffic(self.server_addr[0])
+        # qdisc statistics reflect all traffic, including header of each layer,
+        # not only filesize
+        delta = self.filesize/100
+        self.assertAlmostEqual(c[0], self.filesize, delta=delta)
+        self.assertAlmostEqual(c[1], self.filesize, delta=delta)
+        self.assertAlmostEqual(s[0], self.filesize, delta=delta)
+        self.assertAlmostEqual(s[1], self.filesize, delta=delta)
         
     
     def tearDown(self):
