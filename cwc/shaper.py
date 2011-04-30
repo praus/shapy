@@ -180,6 +180,7 @@ class Shaper(object):
             shapy.Interface(i).root.add(f)
         qh = self.ifb_up.qhandles.next()
         nh = self.ifb_up.nhandles.next()
+        self.ip_handles.update({ip: qh})
         self.__shape_ifb(self.ifb_up, 'src %s' % ip, qh, rate, nh, delay)
     
     
@@ -202,4 +203,3 @@ class Shaper(object):
         if delay:
             htbq.add(shapy.NetemDelayQdisc('%s:' % nhandle, delay=delay))
         ifb.root.add( htbq )
-        self.ip_handles.update({ip: qhandle})
