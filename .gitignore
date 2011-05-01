@@ -1,3 +1,4 @@
 *.pyc
 *.komodoproject
 *.log*
+sudo_password.txt
