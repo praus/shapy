@@ -14,18 +14,13 @@ from shapy.exceptions import ImproperlyConfigured
 def run(command, **kwargs):
     command = shlex.split(command)
     if kwargs.pop('sudo', True):
-        #command.insert(0, '-S')
+        command.insert(0, '-S')
         command.insert(0, 'sudo')
         
-    #logger.info(">> %s" % ' '.join(command)); return
-    
     p = subprocess.Popen(command, bufsize=-1, stdout=subprocess.PIPE,
                          stdin=subprocess.PIPE, stderr=subprocess.PIPE,
                          env=settings.ENV)
-    
-    #if hasattr(settings, 'SUDO_PASSWORD'):
-    #    p.stdin.write('%s\n' % settings.SUDO_PASSWORD)
-    stdout, stderr = p.communicate()
+    stdout, stderr = p.communicate('%s\n' % settings.SUDO_PASSWORD)
     
     if p.returncode == 0:
         logger.info('[{1}] {0}'.format(' '.join(command), p.returncode))
