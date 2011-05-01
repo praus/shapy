@@ -13,6 +13,3 @@ CWC_INTERFACES = (
 # ports excluded from shaping and delaying (holds for in and out)
 # usually used for control ports
 CWC_NOSHAPE_PORTS = (8000,)
-
-with open('sudo_password.txt', 'r') as f:
-    SUDO_PASSWORD = f.readlines()[0].strip()
