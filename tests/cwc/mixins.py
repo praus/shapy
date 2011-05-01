@@ -52,12 +52,10 @@ class ServerMixin(object):
             data = bytearray()
             while len(data) < self.filesize:
                 data += conn.recv(1024)
-            
-            conn.sendall(data)
-            
-            #sent = 0
-            #while sent < self.filesize:
-            #    sent += s.send(data[sent:sent+4096])
+
+            sent = 0
+            while sent < self.filesize:
+                sent += s.send(data[sent:sent+4096])
             
             conn.recv(1)
             conn.close()
