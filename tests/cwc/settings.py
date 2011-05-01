@@ -1,4 +1,3 @@
-from shapy.settings.default import *
 
 COMMANDS = 'cwc.commands'
 
