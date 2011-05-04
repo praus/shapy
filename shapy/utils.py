@@ -12,3 +12,4 @@ def validate_ip(addr):
 def align(l, alignto=4):
     """Aligned length to nearest multiple of 4."""
     return (l + alignto - 1) & ~(alignto - 1)
+

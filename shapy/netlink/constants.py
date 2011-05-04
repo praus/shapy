@@ -20,14 +20,17 @@ NLM_F_EXCL      = 0x200   # Do not touch, if it exists
 NLM_F_CREATE    = 0x400   # Create, if it does not exist
 NLM_F_APPEND    = 0x800   # Add to end of list
 
-# types
+
+###################
+## Message types ##
+###################
+
 NLMSG_NOOP  = 1 
 NLMSG_ERROR = 2 
 NLMSG_DONE  = 3 
 NLMSG_OVERRUN   = 4 
 NLMSG_MIN_TYPE  = 0x10
 
-## Types of messages ##
 RTM_BASE        = 16
 
 RTM_NEWLINK	= 16

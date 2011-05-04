@@ -30,7 +30,8 @@ class Connection(object):
         msg = Message.unpack(contents)
         
         if msg.type == NLMSG_ERROR:
-            errno = -struct.unpack("i", msg.payload[:4])[0]
+            errno = -msg.service_template.error_code
+            #errno = -struct.unpack("i", msg.payload[:4])[0]
             if errno != 0:
                 err = OSError("Netlink error: %s (%d)" % (
                     os.strerror(errno), errno))
