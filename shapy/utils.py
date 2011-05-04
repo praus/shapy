@@ -7,3 +7,8 @@ def validate_ip(addr):
         socket.inet_aton(addr)
     except socket.error:
         raise ImproperlyConfigured("Invalid IP: %s" % addr)
+
+
+def align(l, alignto=4):
+    """Aligned length to nearest multiple of 4."""
+    return (l + alignto - 1) & ~(alignto - 1)
