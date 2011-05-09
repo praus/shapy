@@ -10,7 +10,7 @@ import cStringIO
 from datetime import datetime
 
 from shapy import register_settings
-register_settings('tests.cwc.settings')
+register_settings('tests.emulation.settings')
 from shapy.emulation.shaper import Shaper
 from mixins import ShaperMixin, ServerMixin
 from tests.utils import total_seconds

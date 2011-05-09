@@ -5,7 +5,7 @@ from mixins import ShaperMixin
 import time
 
 from shapy import register_settings
-register_settings('tests.cwc.settings')
+register_settings('tests.emulation.settings')
 
 class TestCWCDelay(unittest.TestCase, ShaperMixin):
     def setUp(self):
