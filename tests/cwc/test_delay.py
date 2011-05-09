@@ -1,10 +1,13 @@
-import unittest2
+import unittest
 import SocketServer, socket
 from tests.utils import ping
 from mixins import ShaperMixin
 import time
 
-class TestCWCDelay(unittest2.TestCase, ShaperMixin):
+from shapy import register_settings
+register_settings('tests.cwc.settings')
+
+class TestCWCDelay(unittest.TestCase, ShaperMixin):
     def setUp(self):
         self.server_addr = ('127.0.0.2', 55000)
         self.client_addr = ('127.0.0.3', 55001)

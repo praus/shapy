@@ -1,5 +1,5 @@
-from shapy.executor import Executable
-from shapy.mixin import ChildrenMixin
+from shapy.framework.executor import Executable
+from shapy.framework.mixin import ChildrenMixin
 from shapy import settings
 
 class TCClass(Executable, ChildrenMixin):

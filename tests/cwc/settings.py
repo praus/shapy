@@ -1,5 +1,5 @@
 
-COMMANDS = 'cwc.commands'
+COMMANDS = 'shapy.emulation.commands'
 
 ### CWC settings ###
 

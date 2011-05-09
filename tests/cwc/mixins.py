@@ -3,7 +3,7 @@ import socket
 from datetime import datetime
 import time
 
-from cwc.shaper import Shaper
+from shapy.emulation.shaper import Shaper
 
 class ShaperMixin(object):
     def setUp(self):       
@@ -55,7 +55,7 @@ class ServerMixin(object):
 
             sent = 0
             while sent < self.filesize:
-                sent += s.send(data[sent:sent+4096])
+                sent += conn.send(data[sent:sent+4096])
             
             conn.recv(1)
             conn.close()

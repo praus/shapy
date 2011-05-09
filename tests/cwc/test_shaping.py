@@ -2,7 +2,7 @@
 #logging.basicConfig(level=logging.INFO, datefmt='%H:%M:%S',
 #                    format='%(asctime)s %(levelname)s: %(message)s')
 
-import unittest2
+import unittest
 import SocketServer, socket
 import random, time
 import threading
@@ -11,11 +11,11 @@ from datetime import datetime
 
 from shapy import register_settings
 register_settings('tests.cwc.settings')
-from cwc.shaper import Shaper
+from shapy.emulation.shaper import Shaper
 from mixins import ShaperMixin, ServerMixin
 from tests.utils import total_seconds
 
-class TestCWCShaping(unittest2.TestCase, ShaperMixin, ServerMixin):
+class TestCWCShaping(unittest.TestCase, ShaperMixin, ServerMixin):
     filesize = 2**19    # 0.5MB
     
     def setUp(self):

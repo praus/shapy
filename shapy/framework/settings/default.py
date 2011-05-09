@@ -11,6 +11,6 @@ ENV = {
     'PATH': '/sbin:/bin:/usr/bin'
 }
 
-COMMANDS = 'shapy.commands'
+COMMANDS = 'shapy.framework.commands'
 
 HTB_DEFAULT_CLASS = '1ff'

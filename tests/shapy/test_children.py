@@ -1,7 +1,7 @@
-import unittest2
-from shapy.tcelements import *
+import unittest
+from shapy.framework.tcelements import *
 
-class TestChildrenManipulation(unittest2.TestCase):
+class TestChildrenManipulation(unittest.TestCase):
     def setUp(self):
         self.lo = Interface('lo')
         self.hq = HTBQdisc('1:', default_class='1ff')

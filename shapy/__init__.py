@@ -1,7 +1,7 @@
 import sys
 import shapy
-import shapy.settings.default
-setattr(shapy, 'settings', sys.modules['shapy.settings.default'])
+import shapy.framework.settings.default
+setattr(shapy, 'settings', sys.modules['shapy.framework.settings.default'])
 
 def register_settings(module_name):
     __import__(module_name)

@@ -1,5 +1,5 @@
 import logging
-logger = logging.getLogger('shapy.interface')
+logger = logging.getLogger('shapy.framework.interface')
 
 import executor
 

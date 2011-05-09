@@ -1,4 +1,4 @@
-from shapy.executor import Executable
+from shapy.framework.executor import Executable
 
 class Filter(Executable):
     children = [] # filter cannot have children

@@ -1,9 +1,9 @@
-import unittest2
+import unittest
 import imp
 import sys
 import shapy
 
-class TestSettings(unittest2.TestCase):
+class TestSettings(unittest.TestCase):
 
     def setUp(self):
         self.settings = imp.new_module('test_settings')

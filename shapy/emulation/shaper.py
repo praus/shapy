@@ -15,9 +15,9 @@ import logging
 import logging.handlers
 
 from shapy import settings
-from shapy import tcelements as shapy
-from shapy import executor
-from shapy import utils
+from shapy.framework import tcelements as shapy
+from shapy.framework import executor
+from shapy.framework import utils
 
 LOG_FILENAME = 'cwc-shaper.log'
 

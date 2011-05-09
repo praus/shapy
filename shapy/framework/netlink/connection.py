@@ -8,9 +8,9 @@ class Connection(object):
     """
     Object representing Netlink socket connection to the kernel.
     """
-    def __init__(self, nltype=socket.NETLINK_ROUTE, groups=0):
-        # nltype = Netlink IP service
-        self.fd = socket.socket(socket.AF_NETLINK, socket.SOCK_RAW, nltype)
+    def __init__(self, nlservice=socket.NETLINK_ROUTE, groups=0):
+        # nlservice = Netlink IP service
+        self.fd = socket.socket(socket.AF_NETLINK, socket.SOCK_RAW, nlservice)
         self.fd.setsockopt(socket.SOL_SOCKET, socket.SO_SNDBUF, 65536)
         self.fd.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, 65536)
         self.fd.bind((0, groups)) # pid=0 lets kernel assign socket PID

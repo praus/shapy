@@ -7,8 +7,9 @@ register_settings('settings')
 from cwc.shaper import Shaper
 
 if __name__ == '__main__':
-    ps = {("127.0.0.2",) : {'upload': 256, 'download': 1024, 'delay': 5},
-          ("127.0.0.3",) : {'upload': 256, 'download': 256, 'delay': 30},
+    ps = {("127.0.0.2",) : {'upload': 1024, 'download': 1024, 'delay': 56},
+          ("127.0.0.3",) : {'upload': 256, 'download': 512, 'delay': 30},
+          ("127.0.0.4",) : {'upload': 256, 'download': 512, 'delay': 30},
           }
 
     sh = Shaper()

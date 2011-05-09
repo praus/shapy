@@ -25,7 +25,7 @@ This module contains code pertaining to the generic messaging on a Netlink socke
 import quopri, binascii
 import struct
 from struct import Struct
-from shapy.utils import align
+from shapy.framework.utils import align, InterpreterMixin
 from .constants import *
 
 class Message(object):
@@ -88,8 +88,8 @@ class Message(object):
             self.type, self.pid, self.seq, self.flags)
 
 
-class ServiceTemplate(object):
-    templates = {}
+class ServiceTemplate(InterpreterMixin):
+    #templates = {}
     
     """Represents the second part of the Netlink message."""
     @classmethod
@@ -99,15 +99,15 @@ class ServiceTemplate(object):
         st_instance.attributes = tuple(st_instance.attrs(rest))
         return st_instance
     
-    @classmethod
-    def register(cls, template, types):
-        for type in types:
-            cls.templates.update({type: template})
-    
-    @classmethod
-    def select(cls, nlmsg_type):
-        """Selects correct ServiceTemplate based on the nlmsg_type."""
-        return cls.templates[nlmsg_type]
+    #@classmethod
+    #def register(cls, template, types):
+    #    for type in types:
+    #        cls.templates.update({type: template})
+    #
+    #@classmethod
+    #def select(cls, nlmsg_type):
+    #    """Selects correct ServiceTemplate based on the nlmsg_type."""
+    #    return cls.templates[nlmsg_type]
     
     def pack(self):
         return ''
@@ -138,7 +138,7 @@ class ACK(ServiceTemplate):
     #|                       OLD Netlink message header              |
     #+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
     
-    format = Struct('I')
+    format = Struct('i')
     
     @classmethod
     def unpack(cls, data):
@@ -174,12 +174,15 @@ class Attr(object):
         data_len = length-cls.rtattr.size
         attr_data = struct.unpack('{0}s'.format(data_len),
                              data[cls.rtattr.size:cls.rtattr.size+data_len])[0]
-        attr_data = attr_data.rstrip('\0')
+        #print len(attr_data)
+        #attr_data = attr_data.rstrip('\0')
         return cls(type, attr_data), data[length:]
     
-    def __init__(self, rta_type, data):
+    def __init__(self, rta_type, payload):
         self.rta_type = rta_type
-        self.data = struct.pack('{0}s'.format(len(data)+1), data)
+        if not payload.endswith('\0'):
+            payload += '\0'
+        self.data = struct.pack('{0}s'.format(len(payload)), payload)
         self.rta_len = self.rtattr.size+len(self.data)
         
     def pack(self):
@@ -188,7 +191,7 @@ class Attr(object):
     
     def unpack_data(self):
         assert hasattr(self, 'data_format'),\
-            "This class does not provide any semantics to the data."
+            "This class does not provide any data semantics."
         return self.data_format.unpack(self.data)
     
     def __repr__(self):
@@ -196,11 +199,4 @@ class Attr(object):
             align(len(self.data)), self.rta_type,
             binascii.b2a_qp(self.data, True, False, False))
 
-
-#def attrs(data):
-#    while True:
-#        attr, data = Attr.unpack(data)
-#        yield attr
-#        if not data: break
-        
     

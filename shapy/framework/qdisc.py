@@ -1,6 +1,6 @@
-from shapy.executor import Executable, get_command
-from shapy.mixin import ChildrenMixin, FilterMixin, ClassFilterMixin
-from shapy.filter import Filter
+from shapy.framework.executor import Executable, get_command
+from shapy.framework.mixin import ChildrenMixin, FilterMixin, ClassFilterMixin
+from shapy.framework.filter import Filter
 from shapy import settings
 
 class Qdisc(Executable):

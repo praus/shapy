@@ -6,10 +6,10 @@ import logging
 import logging.handlers
 #from string import Template
 
-logger = logging.getLogger('shapy.executor')
+logger = logging.getLogger('shapy.framework.executor')
 
 from shapy import settings
-from shapy.exceptions import ImproperlyConfigured
+from shapy.framework.exceptions import ImproperlyConfigured
 
 def run(command, **kwargs):
     command = shlex.split(command)
