@@ -37,12 +37,25 @@ for dirpath, dirnames, filenames in os.walk(project_dir):
 
 
 setup(name='ShaPy',
-      version='1.0',
+      version='0.1',
       description='Netlink and network emulation framework',
       author='Petr Praus',
       author_email='petr@praus.net',
       url='https://github.com/praus/shapy',
       packages=packages,
-      #packages=['shapy', 'shapy.emulation', 'shapy.emulation.commands',
-      #          'shapy.framework', 'shapy.framework.netlink'],
+	  provides=['shapy'],
+	  classifiers=[
+          'Development Status :: 4 - Beta',
+          'Environment :: Console',
+		  'Intended Audience :: Science/Research',
+		  'License :: OSI Approved :: GNU General Public License (GPL)',
+		  'Natural Language :: English',
+		  'Operating System :: POSIX :: Linux',
+		  'Programming Language :: Python :: 2.6',
+		  'Programming Language :: Python :: 2.7',
+		  'Topic :: System',
+		  'Topic :: System :: Emulators',
+		  'Topic :: System :: Networking',
+		  'Topic :: Software Development :: Libraries :: Python Modules',
+          ],
      )
