@@ -1,4 +1,3 @@
-## Introduction
 
 ShaPy can be used to easily create an emulated network. ShaPy consists from two
 main parts: ShaPy Framework and ShaPy Emulation. ShaPy Framework allows
