@@ -5,6 +5,19 @@ accessing traffic control capabilities of the Linux kernel using the Netlink
 interface. ShaPy Emulation builds on the framework and focuses on building
 emulated network.
 
+## Installation
+Standard distutils installation is supported. Since ShaPy is also in PyPI you
+can use:
+    pip install shapy
+
+or if you prefer development version from the repo:
+
+    pip install -e git://github.com/praus/shapy.git#egg=shapy
+
+or download/clone and install the package manually:
+    
+    python setup.py install
+
 ## Examples
 
 ### ShaPy Emulation
