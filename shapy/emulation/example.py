@@ -4,7 +4,7 @@ logging.basicConfig(level=logging.INFO, datefmt='%H:%M:%S',
 
 from shapy import register_settings
 register_settings('settings')
-from cwc.shaper import Shaper
+from shapy.emulation.shaper import Shaper
 
 if __name__ == '__main__':
     ps = {("127.0.0.2",) : {'upload': 1024, 'download': 1024, 'delay': 56},
