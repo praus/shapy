@@ -8,6 +8,7 @@ emulated network.
 ## Installation
 Standard distutils installation is supported. Since ShaPy is also in PyPI you
 can use:
+
     pip install shapy
 
 or if you prefer development version from the repo:
