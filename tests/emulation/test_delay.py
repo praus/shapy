@@ -1,7 +1,7 @@
 import unittest
 import SocketServer, socket
 from tests.utils import ping
-from mixins import ShaperMixin
+from tests.mixins import ShaperMixin
 import time
 
 from shapy import register_settings

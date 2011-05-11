@@ -12,7 +12,7 @@ from datetime import datetime
 from shapy import register_settings
 register_settings('tests.emulation.settings')
 from shapy.emulation.shaper import Shaper
-from mixins import ShaperMixin, ServerMixin
+from tests.mixins import ShaperMixin, ServerMixin
 from tests.utils import total_seconds
 
 class TestCWCShaping(unittest.TestCase, ShaperMixin, ServerMixin):
