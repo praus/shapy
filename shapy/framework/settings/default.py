@@ -13,4 +13,4 @@ ENV = {
 
 COMMANDS = 'shapy.framework.commands'
 
-HTB_DEFAULT_CLASS = '1ff'
+HTB_DEFAULT_CLASS = 0x1ff

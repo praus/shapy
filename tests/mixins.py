@@ -4,7 +4,11 @@ from datetime import datetime
 import time
 
 from shapy.emulation.shaper import Shaper
+from shapy.framework.netlink.message import *
+from shapy.framework.netlink.tc import *
+from shapy.framework.netlink.constants import *
 from tests.utils import total_seconds, eta
+
 
 class ShaperMixin(object):
     def setUp(self):       
@@ -31,6 +35,23 @@ class ShaperMixin(object):
         da = self.shaper_conf[(a,)]['delay']
         db = self.shaper_conf[(b,)]['delay']
         return da+db
+
+
+class TeardownMixin(object):
+    def delete_root_qdisc(self):
+        """
+        Deletes root egress qdisc on a interface designated by self.if_index
+        and returns the resulting ACK message.
+        """
+        tm = tcmsg(socket.AF_UNSPEC, self.if_index, 0, TC_H_ROOT, 0)
+        msg = Message(type=RTM_DELQDISC,
+                      flags=NLM_F_REQUEST | NLM_F_ACK,
+                      service_template=tm)
+        self.conn.send(msg)
+        return self.conn.recv()
+    
+    def tearDown(self):
+        self.delete_root_qdisc()
 
 class ServerMixin(object):
     """

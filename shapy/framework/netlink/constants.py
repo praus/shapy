@@ -71,7 +71,7 @@ RT_TABLE_MAIN=254
 
 IFLA_MTU = 4
 
-### Traffic Control ###
+### Traffic Control (Qdisc) ###
 TCA_KIND    = 1
 TCA_OPTIONS = 2
 TCA_STATS   = 3
@@ -80,6 +80,14 @@ TCA_RATE    = 5
 TCA_FCNT    = 6
 TCA_STATS2  = 7
 TCA_STAB    = 8
+
+
+# HTB Class
+TCA_HTB_UNSPEC  = 0
+TCA_HTB_PARMS   = 1
+TCA_HTB_INIT    = 2
+TCA_HTB_CTAB    = 3
+TCA_HTB_RTAB    = 4
 
 
 #enum {

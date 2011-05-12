@@ -1,7 +1,7 @@
 import logging
 logger = logging.getLogger('shapy.framework.interface')
 
-import executor
+from shapy.framework import executor, utils
 
 class Interface(object):
     interfaces = {}
@@ -18,7 +18,7 @@ class Interface(object):
     
     def __init__(self, name):
         self.name = name
-        #self.ifindex = ...
+        self.if_index = utils.get_if_index(self.name)
     
     def __str__(self):
         return self.name
@@ -64,8 +64,8 @@ class IFB(Interface, executor.Executable):
     module_loaded = False
     
     def __init__(self, name):
-        Interface.__init__(self, name)
         executor.Executable.__init__(self)
+        Interface.__init__(self, name)
 
     def set_shaping(self):
         self.execute()

@@ -96,7 +96,7 @@ class ServiceTemplate(InterpreterMixin):
     def unpack(cls, data):
         rest = data[cls.format.size:]
         st_instance = cls(*cls.format.unpack(data[:cls.format.size]))
-        st_instance.attributes = tuple(st_instance.attrs(rest))
+        st_instance.attributes = tuple(st_instance.unpack_attrs(rest))
         return st_instance
     
     #@classmethod
@@ -115,7 +115,7 @@ class ServiceTemplate(InterpreterMixin):
     def pack_attrs(self):
         return ''.join(( a.pack() for a in self.attributes ))
     
-    def attrs(self, data):
+    def unpack_attrs(self, data):
         while True:
             attr, data = Attr.unpack(data)
             attr.service_template = self
@@ -180,14 +180,17 @@ class Attr(object):
     
     def __init__(self, rta_type, payload):
         self.rta_type = rta_type
-        if not payload.endswith('\0'):
-            payload += '\0'
-        self.data = struct.pack('{0}s'.format(len(payload)), payload)
-        self.rta_len = self.rtattr.size+len(self.data)
+        self.payload = payload
+        #if not payload.endswith('\0'):
+        #    payload += '\0'
+        #self.data = struct.pack('{0}s'.format(len(payload)), payload)
+        #self.rta_len = self.rtattr.size+len(self.data)
         
     def pack(self):
-        return struct.pack('{0}{1}s'.format(self.rtattr.format, align(len(self.data))),
-                           self.rta_len, self.rta_type, self.data)
+        data = struct.pack('{0}s'.format(len(self.payload)), self.payload)
+        rta_len = self.rtattr.size+len(data)
+        return struct.pack('{0}{1}s'.format(self.rtattr.format, align(len(data))),
+                           rta_len, self.rta_type, data)
     
     def unpack_data(self):
         assert hasattr(self, 'data_format'),\
@@ -196,7 +199,7 @@ class Attr(object):
     
     def __repr__(self):
         return """<rtattr datalen=%d rta_type=%d data="%s">""" % (
-            align(len(self.data)), self.rta_type,
-            binascii.b2a_qp(self.data, True, False, False))
+            align(len(self.payload)), self.rta_type,
+            binascii.b2a_qp(self.payload, True, False, False))
 
     
