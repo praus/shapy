@@ -73,7 +73,14 @@ class TestUnpack(unittest.TestCase):
         
         n = NetemOptions.unpack(data[-28:])
         self.assertEqual(n.data.latency, nl_us2ticks(10*1000))
-        
+    
+    def test_unpack_add_prio(self):
+        data = "\x4c\x00\x00\x00\x24\x00\x05\x06\x67\x9c\xcd\x4d\x00\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00\x01\x00\xff\xff\xff\xff\x00\x00\x00\x00\x09\x00\x01\x00\x70\x72\x69\x6f\x00\x00\x00\x00\x1c\x00\x02\x00\x03\x00\x00\x00\x01\x02\x02\x02\x01\x02\x00\x00\x01\x01\x01\x01\x01\x01\x01\x01\x04\x00\x02\x00"
+        msg = Message.unpack(data)
+        self.assertEqual(msg.type, RTM_NEWQDISC)
+        self.assertEqual(msg.flags, 0x605)
+        print msg.service_template.attributes
+    
 
 if __name__ == '__main__':
     unittest.main()

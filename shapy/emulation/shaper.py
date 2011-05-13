@@ -201,5 +201,5 @@ class Shaper(object):
         ifb.root.add( shapy.FlowFilter(ip, '1:%s' % qhandle) )
         htbq = shapy.HTBClass('1:%s' % qhandle, rate=rate, ceil=rate)
         if delay:
-            htbq.add(shapy.NetemDelayQdisc('%s:' % nhandle, delay=delay))
+            htbq.add(shapy.NetemDelayQdisc('%s:' % nhandle, delay))
         ifb.root.add( htbq )

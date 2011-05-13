@@ -22,14 +22,16 @@ def align(l, alignto=4):
     """Aligned length to nearest multiple of 4."""
     return (l + alignto - 1) & ~(alignto - 1)
 
-def convert_handle(str_handle):
+def convert_handle(handle):
     """
     Takes string handle such as 1: or 10:1 and creates a binary number accepted
     by the kernel Traffic Control.
     """
-    major, minor = str_handle.split(':')    # "major:minor"
-    minor = minor if minor else '0'
-    return int(major, 16) << 16 | int(minor, 16)
+    if isinstance(handle, str):
+        major, minor = handle.split(':')    # "major:minor"
+        minor = minor if minor else '0'
+        return int(major, 16) << 16 | int(minor, 16)
+    return handle
 
 def get_if_index(if_name):
     """

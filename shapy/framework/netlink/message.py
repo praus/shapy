@@ -183,6 +183,6 @@ class Attr(object):
     def __repr__(self):
         return """<rtattr datalen=%d rta_type=%d data="%s">""" % (
             align(len(self.payload)), self.rta_type,
-            binascii.b2a_qp(self.payload, True, False, False))
+            self.payload.encode('string_escape'))
 
     

@@ -8,9 +8,11 @@ from shapy.framework.netlink import NetlinkExecutable
 from shapy.framework.netlink.message import Attr
 from shapy.framework.netlink.htb import HTBQdiscAttr
 from shapy.framework.netlink.netem import NetemOptions
+from shapy.framework.netlink.prio import PrioQdiscAttr
 
 class Qdisc(NetlinkExecutable):
     type = RTM_NEWQDISC
+    attrs = []
     
     def __init__(self, handle, **kwargs):
         Executable.__init__(self, **kwargs)
@@ -25,11 +27,14 @@ class pfifoQdisc(QdiscClassless):
     attrs = [Attr(TCA_KIND, 'pfifo\0')]
 
 class IngressQdisc(QdiscClassless):
+    attrs = [Attr(TCA_KIND, 'ingress\0')]
+    
     def __init__(self, handle='ffff:', **kwargs):
         QdiscClassless.__init__(self, handle, **kwargs)
     
     def get_context(self):
-        return {'interface': self.interface}
+        return {'interface': self.interface,
+                'parent': TC_H_INGRESS}
 
 class NetemDelayQdisc(QdiscClassless):
     def __init__(self, handle, latency, **kwargs):
@@ -59,4 +64,4 @@ class HTBQdisc(QdiscClassful):
     #    return self.cmd.format(**self.opts)
         
 class PRIOQdisc(QdiscClassful):
-    pass
+    attrs = [Attr(TCA_KIND, 'prio\0'), PrioQdiscAttr()]

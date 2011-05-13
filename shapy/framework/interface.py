@@ -34,12 +34,13 @@ class Interface(object):
         return self.ingress
         
     def set_shaping(self):
-        assert self.root, "Interface must contain at least a root qdisc."
+        #assert self.root, "Interface must contain at least a root qdisc."
         if hasattr(self, 'ingress'):
             self.ingress.execute()
             for ch in self.ingress.children:
                 ch.execute()
-        self.__traverse_tree(self.root)
+        if hasattr(self, 'root'):
+            self.__traverse_tree(self.root)
     
     def teardown(self):
         """
@@ -65,9 +66,11 @@ class IFB(Interface, executor.Executable):
     
     def __init__(self, name):
         executor.Executable.__init__(self)
-        Interface.__init__(self, name)
+        self.name = name
+        #Interface.__init__(self, name)
 
     def set_shaping(self):
+        self.if_index = utils.get_if_index(self.name)
         self.execute()
         Interface.set_shaping(self)
     

@@ -26,4 +26,5 @@ class NetlinkExecutable(Executable):
                       service_template=tcm)
         
         self.connection.send(msg)
-        return self.connection.recv()
+        resp = self.connection.recv()
+        return resp
