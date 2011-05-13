@@ -89,8 +89,6 @@ class Message(object):
 
 
 class ServiceTemplate(InterpreterMixin):
-    #templates = {}
-    
     """Represents the second part of the Netlink message."""
     @classmethod
     def unpack(cls, data):
@@ -98,16 +96,6 @@ class ServiceTemplate(InterpreterMixin):
         st_instance = cls(*cls.format.unpack(data[:cls.format.size]))
         st_instance.attributes = tuple(st_instance.unpack_attrs(rest))
         return st_instance
-    
-    #@classmethod
-    #def register(cls, template, types):
-    #    for type in types:
-    #        cls.templates.update({type: template})
-    #
-    #@classmethod
-    #def select(cls, nlmsg_type):
-    #    """Selects correct ServiceTemplate based on the nlmsg_type."""
-    #    return cls.templates[nlmsg_type]
     
     def pack(self):
         return ''
@@ -172,21 +160,14 @@ class Attr(object):
     def unpack(cls, data):
         length, type = cls.rtattr.unpack(data[:cls.rtattr.size])
         data_len = length-cls.rtattr.size
-        #import pdb; pdb.set_trace()
-        print data_len
         attr_data = struct.unpack('{0}s'.format(data_len),
                              data[cls.rtattr.size:cls.rtattr.size+data_len])[0]
-        #print len(attr_data)
-        #attr_data = attr_data.rstrip('\0')
         return cls(type, attr_data), data[align(length):]
     
     def __init__(self, rta_type, payload):
         self.rta_type = rta_type
         self.payload = payload
-        #if not payload.endswith('\0'):
-        #    payload += '\0'
-        #self.data = struct.pack('{0}s'.format(len(payload)), payload)
-        #self.rta_len = self.rtattr.size+len(self.data)
+        self.data = self.unpack_data()
         
     def pack(self):
         data = struct.pack('{0}s'.format(len(self.payload)), self.payload)
@@ -195,9 +176,9 @@ class Attr(object):
                            rta_len, self.rta_type, data)
     
     def unpack_data(self):
-        assert hasattr(self, 'data_format'),\
-            "This class does not provide any data semantics."
-        return self.data_format.unpack(self.data)
+        if hasattr(self, 'data_format') and hasattr(self, 'data_struct'):
+            return self.data_struct._make(self.data_format.unpack(self.payload))
+        return None
     
     def __repr__(self):
         return """<rtattr datalen=%d rta_type=%d data="%s">""" % (

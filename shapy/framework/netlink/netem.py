@@ -6,6 +6,8 @@ from shapy.framework.netlink.message import Attr
 from shapy.framework.utils import nl_ticks2us, nl_us2ticks
 from .constants import *
 
+
+
 class NetemOptions(Attr):
     #struct tc_netem_qopt {
     #    __u32   latency;    /* added delay (us) */
@@ -17,12 +19,15 @@ class NetemOptions(Attr):
     #};
     
     data_format = Struct("6I")
+    data_struct = namedtuple('tc_netem_qopt',
+                             "latency limit loss gap duplicate jitter")
     
     @classmethod
     def unpack(cls, data):
         attr, rest = Attr.unpack(data)
-        opts = cls.data_format.unpack(attr.payload)
-        opts[0] = nl_ticks2us(opts[0])
+        #opts = list(cls.data_format.unpack(attr.payload))
+        opts = cls.data_struct._make(cls.data_format.unpack(attr.payload))
+        opts = opts._replace(latency=nl_ticks2us(opts.latency))
         return cls(*opts)
     
     def __init__(self, latency, limit=1000, loss=0, gap=0, duplicate=0, jitter=0):

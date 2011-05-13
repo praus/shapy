@@ -31,11 +31,9 @@ class TestQdisc(unittest.TestCase, TeardownMixin):
                       service_template=tcm)
 
         self.conn.send(msg)
-    
-        response = self.conn.recv()
-        print response
+        self.check_ack(self.conn.recv())
         
-        print self.delete_root_qdisc()
+        self.delete_root_qdisc()
         
     def test_add_htb_qdisc(self):
         handle = 0x1 << 16 # | 0x1   # major:minor
@@ -47,9 +45,9 @@ class TestQdisc(unittest.TestCase, TeardownMixin):
                       service_template=tcm)
         
         self.conn.send(msg)
-        print self.conn.recv()
+        self.check_ack(self.conn.recv())
         
-        print self.delete_root_qdisc()
+        self.delete_root_qdisc()
         
     def test_add_netem_qdisc(self):
         handle = 0x1 << 16 # | 0x1   # major:minor
@@ -62,9 +60,11 @@ class TestQdisc(unittest.TestCase, TeardownMixin):
                       service_template=tcm)
         
         self.conn.send(msg)
-        print self.conn.recv()
-        
-        time.sleep(100)
-        
-        print self.delete_root_qdisc()
-        
+        self.check_ack(self.conn.recv())
+
+        self.delete_root_qdisc()
+    
+    def check_ack(self, ack):
+        self.assertIsInstance(ack.service_template, ACK)
+        self.assertEquals(ack.type, 2)
+        self.assertEquals(ack.flags, 0x0)

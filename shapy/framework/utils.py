@@ -6,10 +6,10 @@ from shapy.framework.executor import run
 
 with open('/proc/net/psched', 'rb') as f:
     psched = f.read()
-    ns_per_usec, ns_per_tick = psched.strip().split()[:2]
-    ns_per_usec = struct.unpack(">I", ns_per_usec.decode('hex'))[0]
-    ns_per_tick = struct.unpack(">I", ns_per_tick.decode('hex'))[0]
-    ticks_per_usec = float(ns_per_usec) / float(ns_per_tick)
+ns_per_usec, ns_per_tick = psched.strip().split()[:2]
+ns_per_usec = struct.unpack(">I", ns_per_usec.decode('hex'))[0]
+ns_per_tick = struct.unpack(">I", ns_per_tick.decode('hex'))[0]
+ticks_per_usec = float(ns_per_usec) / float(ns_per_tick)
 
 def validate_ip(addr):
     assert isinstance(addr, str), "IP address must be a string"
