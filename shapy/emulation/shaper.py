@@ -66,7 +66,7 @@ class Shaper(object):
             ingressq = shapy.IngressQdisc()
             
             # Exclude specified ports from shaping altogether
-            for port in settings.CWC_NOSHAPE_PORTS:
+            for port in settings.EMU_NOSHAPE_PORTS:
                 prioq.add(shapy.FlowFilter('sport %s 0xffff' % port, '1:1ff', prio=1))
                 ingressq.add(shapy.FlowFilter('dport %s 0xffff' % port, '1:1ff', prio=1))
             
