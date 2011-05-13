@@ -4,7 +4,7 @@ COMMANDS = 'shapy.emulation.commands'
 ### CWC settings ###
 
 # it's advisable to set MTU of the interfaces to something real, for example 1500
-CWC_INTERFACES = (
+EMU_INTERFACES = (
     'lo',
 )
 

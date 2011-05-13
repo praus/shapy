@@ -60,7 +60,7 @@ class Shaper(object):
         
         # add ingress qdiscs to all real interfaces (such as eth or lo) so
         # we can redirect traffic to the IFB devices for the actual shaping
-        for i in settings.CWC_INTERFACES:
+        for i in settings.EMU_INTERFACES:
             interface = shapy.Interface(i)
             prioq = shapy.PRIOQdisc('1:')
             ingressq = shapy.IngressQdisc()
@@ -114,7 +114,7 @@ class Shaper(object):
                 self.__shape_download(ip, download, delay)
         
         # finally, we need to actually run those rules we just created
-        for i in settings.CWC_INTERFACES:
+        for i in settings.EMU_INTERFACES:
             logger.info("Setting up shaping/emulation on interface {0}:".format(i))
             shapy.Interface(i).set_shaping()
         logger.info("Setting up IFB devices:")
@@ -128,7 +128,7 @@ class Shaper(object):
         It just purges external configuration. Use reset_all() if you intend
         to reuse this instance.
         """
-        for i in settings.CWC_INTERFACES:
+        for i in settings.EMU_INTERFACES:
             logger.info("Tearing down %s" % i)
             shapy.Interface(i).teardown()
         logger.info("Tearing down IFBs")
@@ -175,7 +175,7 @@ class Shaper(object):
         """Sets up upload shaping (not really policing) and emulation
         for the given _ip_."""
         # egress filter to redirect to IFB, upload -> src <ip> & ifb1
-        for i in settings.CWC_INTERFACES:
+        for i in settings.EMU_INTERFACES:
             f = shapy.RedirectFilter('src %s' % ip, self.ifb_up)
             shapy.Interface(i).root.add(f)
         qh = self.ifb_up.qhandles.next()
@@ -187,7 +187,7 @@ class Shaper(object):
     def __shape_download(self, ip, rate, delay):
         """Sets up download shaping and emulation for the given _ip_."""
         # ingress filter to redirect to IFB, download -> dst <ip> & ifb0
-        for i in settings.CWC_INTERFACES:
+        for i in settings.EMU_INTERFACES:
             f = shapy.RedirectFilter('dst %s' % ip, self.ifb_down)
             shapy.Interface(i).ingress.add(f)
         qh = self.ifb_down.qhandles.next()
