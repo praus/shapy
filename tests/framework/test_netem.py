@@ -10,9 +10,9 @@ from tests.mixins import ShaperMixin
 
 class TestNetemDelay(unittest.TestCase):
     def setUp(self):
-        self.delay = 50 # ms
+        self.delay = 500 # ms
         self.interface = Interface('lo')
-        self.interface.add(NetemDelayQdisc('1:', delay=self.delay))
+        self.interface.add(NetemDelayQdisc('1:', self.delay))
         self.interface.set_shaping()
     
     def test_delay(self):

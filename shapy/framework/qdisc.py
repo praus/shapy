@@ -7,6 +7,7 @@ from shapy.framework.netlink.constants import *
 from shapy.framework.netlink import NetlinkExecutable
 from shapy.framework.netlink.message import Attr
 from shapy.framework.netlink.htb import HTBQdiscAttr
+from shapy.framework.netlink.netem import NetemOptions
 
 class Qdisc(NetlinkExecutable):
     type = RTM_NEWQDISC
@@ -31,7 +32,10 @@ class IngressQdisc(QdiscClassless):
         return {'interface': self.interface}
 
 class NetemDelayQdisc(QdiscClassless):
-    pass
+    def __init__(self, handle, latency, **kwargs):
+        self.attrs = [Attr(TCA_KIND, 'netem\0'),
+                      NetemOptions(latency*1000)]
+        QdiscClassless.__init__(self, handle, **kwargs)
 
 
 class QdiscClassful(Qdisc, ClassFilterMixin):

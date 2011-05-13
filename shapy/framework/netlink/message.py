@@ -172,11 +172,13 @@ class Attr(object):
     def unpack(cls, data):
         length, type = cls.rtattr.unpack(data[:cls.rtattr.size])
         data_len = length-cls.rtattr.size
+        #import pdb; pdb.set_trace()
+        print data_len
         attr_data = struct.unpack('{0}s'.format(data_len),
                              data[cls.rtattr.size:cls.rtattr.size+data_len])[0]
         #print len(attr_data)
         #attr_data = attr_data.rstrip('\0')
-        return cls(type, attr_data), data[length:]
+        return cls(type, attr_data), data[align(length):]
     
     def __init__(self, rta_type, payload):
         self.rta_type = rta_type

@@ -1,3 +1,4 @@
+import os
 import unittest
 import socket
 import struct
@@ -7,7 +8,7 @@ from shapy.framework.netlink.constants import *
 from shapy.framework.netlink.message import *
 from shapy.framework.netlink.tc import *
 from shapy.framework.netlink.connection import Connection
-
+from shapy.framework.netlink.netem import *
 
 class TestUnpack(unittest.TestCase):
     def setUp(self):
@@ -31,27 +32,42 @@ class TestUnpack(unittest.TestCase):
         """
         TCA_HTB_INIT is composed from TCA_HTB_PARMS, TCA_HTB_CTAB, TCA_HTB_RTAB
         """
-        
-        with open('tests/netlink/htb_add_class.data', 'rb') as f:
+        this_dir = os.path.dirname(os.path.realpath(__file__))
+        with open(os.path.join(this_dir, 'htb_add_class.data'), 'rb') as f:
             data = f.read()
         msg = Message.unpack(data)
+        self.assertEqual(msg.type, RTM_NEWTCLASS)
+        self.assertEqual(msg.flags, 0x605)
         
-        init = tuple(self.unpack_attrs(data[36:]))[1]
-        attrs = [ self.unpack_attrs(init.payload) ]
-        #self.assertEqual(len(attrs), 3)
+        st = msg.service_template
+        self.assertEqual(st.tcm_handle, 0x10005)
+        self.assertEqual(st.tcm_parent, 0x10001)
+        
+        init = tuple(st.unpack_attrs(data[36:]))[1]
+        attrs = list(st.unpack_attrs(init.payload))
+        self.assertEqual(len(attrs), 3)
 
-    def unpack_attrs(self, data):
-        while True:
-            attr, data = Attr.unpack(data)
-            yield attr
-            if not data: break
     
-    def test_unpack_filter(self):
-        data = "\\\0\0\0,\0\5\6\250\251\313M\0\0\0\0\0\0\0\0\1\0\0\0\0\0\0\0\0\0\1\0\10\0\1\0\10\0\1\0u32\0000\0\2\0\10\0\1\0\5\0\1\0$\0\5\0\1\0\1\0\0\0\0\0\0\0\0\0\0\0\0\0\377\377\377\377\177\0\0\3\f\0\0\0\0\0\0\0"
+    #def test_unpack_add_filter(self):
+    #    """
+    #    tc filter add dev lo parent 1: protocol ip prio 1 u32 \
+    #    match ip src 127.0.0.3 flowid 1:5
+    #    """
+    #    data = "\\\0\0\0,\0\5\6\250\251\313M\0\0\0\0\0\0\0\0\1\0\0\0\0\0\0\0\0\0\1\0\10\0\1\0\10\0\1\0u32\0000\0\2\0\10\0\1\0\5\0\1\0$\0\5\0\1\0\1\0\0\0\0\0\0\0\0\0\0\0\0\0\377\377\377\377\177\0\0\3\f\0\0\0\0\0\0\0"
+    #    msg = Message.unpack(data)
+    #    print msg
+    #    st = msg.service_template
+    #    print st.attributes
+    
+    def test_unpack_add_netem(self):
+        """tc qdisc add dev lo root handle 1: netem delay 10ms"""
+        data = "\x4c\x00\x00\x00\x24\x00\x05\x06\x07\x1b\xcc\x4d\x00\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00\x01\x00\xff\xff\xff\xff\x00\x00\x00\x00\x0a\x00\x01\x00\x6e\x65\x74\x65\x6d\x00\x00\x00\x1c\x00\x02\x00\x5a\x62\x02\x00\xe8\x03\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"
         msg = Message.unpack(data)
         print msg
         st = msg.service_template
-        print st.attributes
+        print NetemOptions.unpack(data[-28:])
+        #print NetemOptions.unpack(st.attributes[1])
+        
 
 if __name__ == '__main__':
     unittest.main()
