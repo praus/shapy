@@ -38,6 +38,5 @@ class PrioQdiscAttr(Attr):
     
     def __init__(self, bands=3, priomap="1 2 2 2 1 2 0 0 1 1 1 1 1 1 1 1"):
         pm = [ int(p) for p in priomap.split() ]
-        print pm
         data = self.data_format.pack(bands, *pm)
         Attr.__init__(self, TCA_OPTIONS, data)

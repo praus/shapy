@@ -6,9 +6,9 @@ from .tc import tcmsg
 from .constants import *
 from shapy.framework.utils import convert_handle
 
+connection = Connection()
+
 class NetlinkExecutable(Executable):
-    connection = Connection()
-    
     def execute(self):
         c = self.get_context()
         interface = self.get_interface()
@@ -25,6 +25,6 @@ class NetlinkExecutable(Executable):
                       flags=NLM_F_EXCL | NLM_F_CREATE | NLM_F_REQUEST | NLM_F_ACK,
                       service_template=tcm)
         
-        self.connection.send(msg)
-        resp = self.connection.recv()
+        connection.send(msg)
+        resp = connection.recv()
         return resp
