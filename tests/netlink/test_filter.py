@@ -6,17 +6,10 @@ from shapy.framework.netlink.tc import *
 from shapy.framework.netlink.htb import HTBQdiscAttr
 from shapy.framework.netlink.connection import Connection
 
-from tests.mixins import TeardownMixin
+from tests import TCTestCase
 
-class TestQdisc(unittest.TestCase, TeardownMixin):
-    def setUp(self):
-        self.if_index = 1   # lo
-        self.conn = Connection()
-        try:
-            self.delete_root_qdisc()
-        except OSError:
-            pass
-        
+class TestFilter(TCTestCase):
+    pass
     #def test_add_filter(self):
     #    self.add_htb_qdisc()
     #    

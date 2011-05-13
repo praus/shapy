@@ -25,7 +25,6 @@ class NetemOptions(Attr):
     @classmethod
     def unpack(cls, data):
         attr, rest = Attr.unpack(data)
-        #opts = list(cls.data_format.unpack(attr.payload))
         opts = cls.data_struct._make(cls.data_format.unpack(attr.payload))
         opts = opts._replace(latency=nl_ticks2us(opts.latency))
         return cls(*opts)

@@ -6,10 +6,11 @@ from shapy.framework.filter import *
 from shapy.framework.interface import *
 
 from tests.utils import ping
-from tests.mixins import TeardownMixin
+from tests import TCTestCase
 
-class TestNetemDelay(unittest.TestCase, TeardownMixin):
+class TestNetemDelay(TCTestCase):
     def setUp(self):
+        super(TestNetemDelay, self).setUp()
         self.delay = 50 # ms
         self.interface = Interface('lo')
         self.interface.add(NetemDelayQdisc('1:', self.delay))

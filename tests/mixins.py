@@ -37,22 +37,6 @@ class ShaperMixin(object):
         return da+db
 
 
-class TeardownMixin(object):
-    def delete_root_qdisc(self):
-        """
-        Deletes root egress qdisc on a interface designated by self.if_index
-        and returns the resulting ACK message.
-        """
-        tm = tcmsg(socket.AF_UNSPEC, self.if_index, 0, TC_H_ROOT, 0)
-        msg = Message(type=RTM_DELQDISC,
-                      flags=NLM_F_REQUEST | NLM_F_ACK,
-                      service_template=tm)
-        self.conn.send(msg)
-        return self.conn.recv()
-    
-    def tearDown(self):
-        self.delete_root_qdisc()
-
 class ServerMixin(object):
     """
     Expected members of a class this object is mixed into:
