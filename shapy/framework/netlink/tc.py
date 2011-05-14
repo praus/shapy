@@ -46,7 +46,7 @@ class tcmsg(ServiceTemplate):
         return tm + self.pack_attrs()
 
     def __repr__(self):
-        return "<tcmsg family={0} if={1} handle={2} parent={3} info={4}>".format(
+        return "<tcmsg family={0} if={1} handle={2:#x} parent={3:#x} info={4}>".format(
             self.tcm_family, self.tcm_ifindex, self.tcm_handle,
             self.tcm_parent, self.tcm_info)
 
