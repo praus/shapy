@@ -18,6 +18,7 @@ class Qdisc(NetlinkExecutable):
         Executable.__init__(self, **kwargs)
         self.opts.update({'handle': handle})
 
+
 class QdiscClassless(Qdisc, FilterMixin):
     def __init__(self, *args, **kwargs):
         Qdisc.__init__(self, *args, **kwargs)

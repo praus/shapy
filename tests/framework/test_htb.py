@@ -16,6 +16,10 @@ class TestHTB(unittest.TestCase, ServerMixin, ClientMixin):
         self.client_speed = 128 
         
         self.i = Interface('lo')
+        try:
+            self.i.teardown()
+        except OSError:
+            pass
         h1 = HTBQdisc('1:')#, default_class='1ff')
         h1.add( FlowFilter('dst 127.0.0.2', '1:2', prio=1) )
         h1.add( FlowFilter('dst 127.0.0.3', '1:1', prio=1) )

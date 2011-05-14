@@ -133,6 +133,7 @@ class ACK(ServiceTemplate):
         rest = data[cls.format.size:]
         st_instance = cls(*cls.format.unpack(data[:cls.format.size]))
         st_instance.attributes = []
+        st_instance.old_message = rest.encode('string_escape')
         return st_instance
     
     def __init__(self, error_code):

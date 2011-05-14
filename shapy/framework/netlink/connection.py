@@ -33,8 +33,8 @@ class Connection(object):
             errno = -msg.service_template.error_code
             #errno = -struct.unpack("i", msg.payload[:4])[0]
             if errno != 0:
-                err = OSError("Netlink error: %s (%d)" % (
-                    os.strerror(errno), errno))
+                err = OSError("Netlink error: %s (%d) | msg: %s" % (
+                    os.strerror(errno), errno, msg.service_template.old_message))
                 err.errno = errno
                 raise err
         return msg
