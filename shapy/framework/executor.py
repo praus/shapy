@@ -14,7 +14,8 @@ from shapy.framework.exceptions import ImproperlyConfigured
 def run(command, **kwargs):
     command = shlex.split(command)
     if kwargs.pop('sudo', True):
-        command.insert(0, '-S')
+        if settings.SUDO_PASSWORD:
+            command.insert(0, '-S')
         command.insert(0, 'sudo')
         
     p = subprocess.Popen(command, bufsize=-1, stdout=subprocess.PIPE,
