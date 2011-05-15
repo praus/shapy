@@ -1,6 +1,9 @@
 import subprocess
 import shlex
 
+class PingError(OSError):
+    pass
+
 def ping(host_from, host_to, count=4, interval=0.2):
     """
     ICMP packets has to be sent by a process owned by the root, /bin/ping has
@@ -15,6 +18,7 @@ def ping(host_from, host_to, count=4, interval=0.2):
     stdout, stderr = p.communicate()
     if p.returncode == 0:
         return float(stdout.splitlines()[-1].split('/')[4])
+    raise PingError(p.returncode)
 
 
 def eta(filesize, a, b):
