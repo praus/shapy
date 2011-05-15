@@ -10,7 +10,7 @@ from shapy.framework.netlink.htb import HTBQdiscAttr
 from shapy.framework.netlink.netem import NetemOptions
 from shapy.framework.netlink.prio import PrioQdiscAttr
 
-class Qdisc(NetlinkExecutable):
+class Qdisc(Executable):
     type = RTM_NEWQDISC
     attrs = []
     
@@ -38,9 +38,12 @@ class IngressQdisc(QdiscClassless):
                 'parent': TC_H_INGRESS}
 
 class NetemDelayQdisc(QdiscClassless):
+    # please note this will not work as root qdisc when Executable mod
+    # netlink (NetlinkExecutable) is required for this
     def __init__(self, handle, latency, **kwargs):
         self.attrs = [Attr(TCA_KIND, 'netem\0'),
                       NetemOptions(latency*1000)]
+        kwargs.update(delay=latency)
         QdiscClassless.__init__(self, handle, **kwargs)
 
 
@@ -52,17 +55,17 @@ class QdiscClassful(Qdisc, ClassFilterMixin):
 class HTBQdisc(QdiscClassful):
     attrs = [Attr(TCA_KIND, 'htb\0'),
              HTBQdiscAttr(defcls=settings.HTB_DEFAULT_CLASS)]
-    #def get(self):
-    #    """
-    #    A slightly more complicated get method to distinguish between root
-    #    qdisc and normal qdisc.
-    #    """
-    #    self.opts.update(self.get_context())
-    #    if hasattr(self, 'interface'):
-    #        return get_command('HTBRootQdisc', interface=self.interface,
-    #                           default_class=settings.HTB_DEFAULT_CLASS)
-    #    
-    #    return self.cmd.format(**self.opts)
+    def get(self):
+        """
+        A slightly more complicated get method to distinguish between root
+        qdisc and normal qdisc.
+        """
+        self.opts.update(self.get_context())
+        if hasattr(self, 'interface'):
+            return get_command('HTBRootQdisc', interface=self.interface,
+                               default_class=settings.HTB_DEFAULT_CLASS)
+        
+        return self.cmd.format(**self.opts)
         
 class PRIOQdisc(QdiscClassful):
     attrs = [Attr(TCA_KIND, 'prio\0'), PrioQdiscAttr()]
