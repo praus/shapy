@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 import logging
 logging.basicConfig(level=logging.INFO, datefmt='%H:%M:%S',
                     format='%(asctime)s %(levelname)s: %(message)s')
