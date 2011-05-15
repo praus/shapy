@@ -9,19 +9,15 @@ register_settings('settings')
 from shapy.emulation.shaper import Shaper
 
 if __name__ == '__main__':
-    ps = {("127.0.0.2",) : {'upload': 1024, 'download': 1024, 'delay': 56},
-          ("127.0.0.3",) : {'upload': 256, 'download': 512, 'delay': 30},
-          ("127.0.0.4",) : {'upload': 256, 'download': 512, 'delay': 30},
+    ps = {("127.0.0.2",) : {'upload': 1024, 'download': 1024, 'delay': 5},
+          ("127.0.0.3",) : {'upload': 256, 'download': 512, 'delay': 20},
+          ("127.0.0.4",) : {'upload': 256, 'download': 512, 'delay': 20},
           }
 
     sh = Shaper()
     sh.set_shaping(ps)
 
     #print sh.ip_handles
-    
-    #import pdb; pdb.set_trace()
-    import time
-    time.sleep(1)
     
     #sh.teardown_all()
     
