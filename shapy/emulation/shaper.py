@@ -21,15 +21,16 @@ from shapy.framework import utils
 
 LOG_FILENAME = 'cwc-shaper.log'
 
-#logger = logging.getLogger('cwc.shaper')
-logger = logging.getLogger('')
-logger.setLevel(logging.INFO)
+shapy_logger = logging.getLogger('shapy')
+shapy_logger.setLevel(logging.INFO)
 handler = logging.handlers.RotatingFileHandler(
               LOG_FILENAME, maxBytes=100*1024, backupCount=5)
 fmt = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 handler.setFormatter(fmt)
-logger.addHandler(handler)
+shapy_logger.addHandler(handler)
 
+
+logger = logging.getLogger('shapy.emulation.shaper')
 
 class Shaper(object):
     instance = None
