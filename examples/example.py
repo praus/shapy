@@ -2,7 +2,7 @@
 
 import logging
 logging.basicConfig(level=logging.INFO, datefmt='%H:%M:%S',
-                    format='%(asctime)s %(levelname)s: %(message)s')
+                    format='%(asctime)s %(name)s %(levelname)s: %(message)s')
 
 from shapy import register_settings
 register_settings('settings')
