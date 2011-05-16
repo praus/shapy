@@ -19,7 +19,7 @@ from shapy.framework import tcelements as shapy
 from shapy.framework import executor
 from shapy.framework import utils
 
-LOG_FILENAME = 'cwc-shaper.log'
+LOG_FILENAME = 'shaper.log'
 
 shapy_logger = logging.getLogger('shapy')
 shapy_logger.setLevel(logging.INFO)
