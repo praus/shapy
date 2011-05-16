@@ -36,12 +36,12 @@ for dirpath, dirnames, filenames in os.walk(project_dir):
         data_files.append([dirpath, [os.path.join(dirpath, f) for f in filenames]])
 
 
-setup(name='ShaPy',
+setup(name='shapy-tc',
       version='0.1',
-      description='Netlink and network emulation framework',
+      description='Netlink and network emulation framework - TC only version',
       author='Petr Praus',
       author_email='petr@praus.net',
-      url='https://github.com/praus/shapy',
+      url='https://github.com/praus/shapy/tree/tc',
       packages=packages,
 	  provides=['shapy'],
 	  classifiers=[
