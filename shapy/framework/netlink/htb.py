@@ -1,7 +1,7 @@
 from shapy.framework.netlink.message import Attr
 from .constants import *
 from struct import Struct
-
+from shapy.framework.utils import nl_us2ticks
 
 class HTBQdiscAttr(Attr):
     """Representation of HTB qdisc options."""
@@ -60,4 +60,29 @@ class HTBParms(Attr):
         t = self.tc_htb_opt.pack(390625000, 195312500, quantum, 0, prio)
         data = r + c + t
         Attr.__init__(self, TCA_HTB_PARMS, data)
+
+
+def tc_calc_rtable(rate, mpu, cell_log, mtu):
+    rtab = []
+    bps = rate
+    
+    if mtu == 0:
+        mtu = 2047
+
+    if cell_log < 0:
+        cell_log = 0;
+        n = mtu >> cell_log
+        while n > 255:
+            cell_log += 1
+            n = mtu >> cell_log
+
+    for i in range(0, 256):
+        size = (i + 1) << cell_log
+        rtab.append(tc_calc_xmittime(bps, size))
         
+    return rtab;
+
+def tc_calc_xmittime(rate, size):
+    TIME_UNITS_PER_SEC = 1000
+    return nl_us2ticks(TIME_UNITS_PER_SEC*(float(size)/rate))
+
