@@ -62,7 +62,34 @@ class HTBParms(Attr):
         Attr.__init__(self, TCA_HTB_PARMS, data)
 
 
-def tc_calc_rtable(rate, mpu, cell_log, mtu):
+class RTab(Attr):
+    """
+    Rate table attribute, 256 integers representing an estimate how long it
+    takes to send packets of various lengths.
+    """
+    data_format = Struct("256I")
+    
+    def __init__(self, rate, mtu, cell_log=-1):
+        rtab = tc_calc_rtable(rate, cell_log, mtu)
+        data = self.data_format.pack(*rtab)
+        Attr.__init__(self, TCA_HTB_RTAB, data)
+    
+class CTab(RTab):
+    def __init__(self, rate, mtu, cell_log=-1):
+        rtab = tc_calc_rtable(rate, cell_log, mtu)
+        data = self.data_format.pack(*rtab)
+        Attr.__init__(self, TCA_HTB_CTAB, data)
+        
+
+def tc_calc_rtable(rate, cell_log, mtu):
+    """
+    rtab[pkt_len>>cell_log] = pkt_xmit_time
+    
+    cell - The cell size determines he granularity of packet transmission time
+    calculations. Has a sensible default.
+    
+    """
+    # http://kerneltrap.org/mailarchive/linux-netdev/2009/11/2/6259456/thread
     rtab = []
     bps = rate
     
@@ -70,11 +97,10 @@ def tc_calc_rtable(rate, mpu, cell_log, mtu):
         mtu = 2047
 
     if cell_log < 0:
-        cell_log = 0;
-        n = mtu >> cell_log
-        while n > 255:
+        cell_log = 0
+        while (mtu >> cell_log) > 255:
             cell_log += 1
-            n = mtu >> cell_log
+        print 'cell_log', cell_log
 
     for i in range(0, 256):
         size = (i + 1) << cell_log
@@ -83,6 +109,6 @@ def tc_calc_rtable(rate, mpu, cell_log, mtu):
     return rtab;
 
 def tc_calc_xmittime(rate, size):
-    TIME_UNITS_PER_SEC = 1000
-    return nl_us2ticks(TIME_UNITS_PER_SEC*(float(size)/rate))
+    TIME_UNITS_PER_SEC = 1000000#000
+    return int(nl_us2ticks(TIME_UNITS_PER_SEC*(float(size)/rate)))
 
