@@ -45,7 +45,7 @@ class HTBParms(Attr):
     #};
     
     tc_ratespec = Struct("BxHhHI")
-    tc_htb_opt = Struct("12x12x5I")
+    tc_htb_opt = Struct("5I")
     data_format = Struct("8xI8xI5I") # tc_htb_opt
     
     @classmethod
