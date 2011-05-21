@@ -38,7 +38,4 @@ class TestQdisc(TCTestCase):
         self.conn.send(msg)
         self.check_ack(self.conn.recv())
     
-    def check_ack(self, ack):
-        self.assertIsInstance(ack.service_template, ACK)
-        self.assertEquals(ack.type, 2)
-        self.assertEquals(ack.flags, 0x0)
+    

@@ -43,6 +43,11 @@ class TCTestCase(unittest.TestCase):
         self.conn.send(msg)
         return self.conn.recv()
     
+    def check_ack(self, ack):
+        self.assertIsInstance(ack.service_template, ACK)
+        self.assertEquals(ack.type, 2)
+        self.assertEquals(ack.flags, 0x0)
+    
     def tearDown(self):
         try:
             self.delete_root_qdisc()
