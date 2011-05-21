@@ -32,6 +32,8 @@ class TestUnpack(unittest.TestCase):
     def test_unpack_htb_class(self):
         """
         TCA_HTB_INIT is composed from TCA_HTB_PARMS, TCA_HTB_CTAB, TCA_HTB_RTAB
+        
+        tc class add dev lo parent 1: classid 1:1 htb rate 534
         """
         this_dir = os.path.dirname(os.path.realpath(__file__))
         with open(os.path.join(this_dir, 'htb_add_class.data'), 'rb') as f:
@@ -41,12 +43,17 @@ class TestUnpack(unittest.TestCase):
         self.assertEqual(msg.flags, 0x605)
         
         st = msg.service_template
-        self.assertEqual(st.tcm_handle, 0x10005)
-        self.assertEqual(st.tcm_parent, 0x10001)
+        self.assertEqual(st.tcm_handle, 0x10001)
+        self.assertEqual(st.tcm_parent, 0x10000)
         
         init = tuple(st.unpack_attrs(data[36:]))[1]
         attrs = list(st.unpack_attrs(init.payload))
         self.assertEqual(len(attrs), 3)
+        
+        from shapy.framework.netlink.htb import tc_calc_rtable
+        self.assertItemsEqual(tc_calc_rtable(66, -1, 1600),
+                              struct.unpack("256I", attrs[2].payload),
+                              "Rate table (rtab) calculation is wrong.")
 
     
     def test_unpack_add_filter(self):
