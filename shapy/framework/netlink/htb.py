@@ -1,3 +1,4 @@
+import os
 from shapy.framework.netlink.message import Attr
 from .constants import *
 from struct import Struct
@@ -54,10 +55,17 @@ class HTBParms(Attr):
         d = cls.data_format.unpack(attr.data)
         return cls(d[0], d[1], d[5], d[7])
     
-    def __init__(self, rate, ceil, quantum=0, prio=0):
+    def __init__(self, rate, ceil=0, mtu=1600, quantum=0, prio=0):
+        """
+        rate, ceil, mtu: bytes
+        """
+        if not ceil: ceil = rate
         r = self.tc_ratespec.pack(3, 0, -1, 0, rate)
         c = self.tc_ratespec.pack(3, 0, -1, 0, ceil)
-        t = self.tc_htb_opt.pack(390625000, 195312500, quantum, 0, prio)
+        hz = os.sysconf('SC_CLK_TCK')
+        buffer = tc_calc_xmittime(rate, (rate / hz) + mtu)
+        cbuffer = tc_calc_xmittime(ceil, (rate / hz) + mtu)
+        t = self.tc_htb_opt.pack(buffer, cbuffer, quantum, 0, prio)
         data = r + c + t
         Attr.__init__(self, TCA_HTB_PARMS, data)
 
@@ -69,13 +77,13 @@ class RTab(Attr):
     """
     data_format = Struct("256I")
     
-    def __init__(self, rate, mtu, cell_log=-1):
+    def __init__(self, rate, mtu, cell_log=3):
         rtab = tc_calc_rtable(rate, cell_log, mtu)
         data = self.data_format.pack(*rtab)
         Attr.__init__(self, TCA_HTB_RTAB, data)
     
 class CTab(RTab):
-    def __init__(self, rate, mtu, cell_log=-1):
+    def __init__(self, rate, mtu, cell_log=3):
         rtab = tc_calc_rtable(rate, cell_log, mtu)
         data = self.data_format.pack(*rtab)
         Attr.__init__(self, TCA_HTB_CTAB, data)
@@ -100,7 +108,6 @@ def tc_calc_rtable(rate, cell_log, mtu):
         cell_log = 0
         while (mtu >> cell_log) > 255:
             cell_log += 1
-        print 'cell_log', cell_log
 
     for i in range(0, 256):
         size = (i + 1) << cell_log

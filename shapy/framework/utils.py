@@ -3,6 +3,7 @@ import re
 import struct
 from shapy.framework.exceptions import ImproperlyConfigured
 from shapy.framework.executor import run
+from shapy import settings
 
 with open('/proc/net/psched', 'rb') as f:
     psched = f.read()
@@ -51,6 +52,15 @@ def nl_us2ticks(delay):
 def nl_ticks2us(ticks):
     """Convert ticks to microseconds."""
     return ticks / ticks_per_usec
+
+def convert_to_bytes(rate):
+    """
+    Converts rate in kilobits or kilobytes to bytes based on shapy.settings
+    """
+    r = rate * 1000
+    if settings.UNITS == "kbit":
+        r = r / 8
+    return r
 
 class InterpreterMixin(object):
     interpreters = {}
