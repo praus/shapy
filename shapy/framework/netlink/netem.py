@@ -31,7 +31,7 @@ class NetemOptions(Attr):
     
     def __init__(self, latency, limit=1000, loss=0, gap=0, duplicate=0, jitter=0):
         """Latency is in microseconds [us]"""
-        latency_ticks = int(nl_us2ticks(latency))
+        latency_ticks = nl_us2ticks(latency)
         data = self.data_format.pack(latency_ticks, limit, loss,
                                      gap, duplicate, jitter)
         Attr.__init__(self, TCA_OPTIONS, data)

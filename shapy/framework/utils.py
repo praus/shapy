@@ -47,7 +47,7 @@ def get_if_index(if_name):
 
 def nl_us2ticks(delay):
     """Convert microseconds to timer ticks."""
-    return ticks_per_usec * delay
+    return int(ticks_per_usec * delay)
 
 def nl_ticks2us(ticks):
     """Convert ticks to microseconds."""

@@ -117,5 +117,5 @@ def tc_calc_rtable(rate, cell_log, mtu):
 
 def tc_calc_xmittime(rate, size):
     TIME_UNITS_PER_SEC = 1000000#000
-    return int(nl_us2ticks(TIME_UNITS_PER_SEC*(float(size)/rate)))
+    return int(nl_us2ticks(int(TIME_UNITS_PER_SEC*(float(size)/rate))))
 
