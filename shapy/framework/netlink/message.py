@@ -186,4 +186,9 @@ class Attr(object):
             align(len(self.payload)), self.rta_type,
             self.payload.encode('string_escape'))
 
-    
+def unpack_attrs(data):
+    while True:
+        attr, data = Attr.unpack(data)
+        yield attr
+        if not data: break
+
