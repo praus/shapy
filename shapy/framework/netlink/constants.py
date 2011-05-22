@@ -72,6 +72,7 @@ RT_TABLE_MAIN   = 254
 IFLA_MTU = 4
 
 ### Traffic Control (Qdisc) ###
+TCA_UNSPEC  = 0
 TCA_KIND    = 1
 TCA_OPTIONS = 2
 TCA_STATS   = 3
@@ -82,7 +83,7 @@ TCA_STATS2  = 7
 TCA_STAB    = 8
 
 
-# HTB Class
+### HTB Class ###
 TCA_HTB_UNSPEC  = 0
 TCA_HTB_PARMS   = 1
 TCA_HTB_INIT    = 2
@@ -90,7 +91,7 @@ TCA_HTB_CTAB    = 3
 TCA_HTB_RTAB    = 4
 
 
-# Filter attributes
+### Filter attributes ###
 TCA_U32_UNSPEC  = 0
 TCA_U32_CLASSID = 1
 TCA_U32_HASH    = 2
@@ -102,6 +103,14 @@ TCA_U32_ACT     = 7
 TCA_U32_INDEV   = 8
 TCA_U32_PCNT    = 9
 TCA_U32_MARK    = 10
+
+# U32 filter flags
+TC_U32_TERMINAL  = 1
+TC_U32_OFFSET    = 2
+TC_U32_VAROFFSET = 4
+TC_U32_EAT       = 8
+TC_U32_MAXDEPTH  = 8
+
 
 #enum {
 #	RTM_NEWACTION	= 48,
