@@ -118,6 +118,23 @@ TCA_EGRESS_MIRROR   = 2  # mirror packet to EGRESS
 TCA_INGRESS_REDIR   = 3  # packet redirect to INGRESS
 TCA_INGRESS_MIRROR  = 4  # mirror packet to INGRESS
 
+TCA_ACT_UNSPEC   = 0
+TCA_ACT_KIND     = 1
+TCA_ACT_OPTIONS  = 2
+TCA_ACT_INDEX    = 3
+TCA_ACT_STATS    = 4
+
+# filter action flags
+TC_ACT_UNSPEC       = -1
+TC_ACT_OK           = 0
+TC_ACT_RECLASSIFY   = 1
+TC_ACT_SHOT         = 2
+TC_ACT_PIPE         = 3
+TC_ACT_STOLEN       = 4
+TC_ACT_QUEUED       = 5
+TC_ACT_REPEAT       = 6
+TC_ACT_JUMP         = 0x10000000
+
 # mirred params
 TCA_MIRRED_UNSPEC = 0
 TCA_MIRRED_TM     = 1
