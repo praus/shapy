@@ -111,6 +111,17 @@ TC_U32_VAROFFSET = 4
 TC_U32_EAT       = 8
 TC_U32_MAXDEPTH  = 8
 
+# Filter actions
+TCA_ACT_MIRRED      = 8
+TCA_EGRESS_REDIR    = 1  # packet redirect to EGRESS
+TCA_EGRESS_MIRROR   = 2  # mirror packet to EGRESS
+TCA_INGRESS_REDIR   = 3  # packet redirect to INGRESS
+TCA_INGRESS_MIRROR  = 4  # mirror packet to INGRESS
+
+# mirred params
+TCA_MIRRED_UNSPEC = 0
+TCA_MIRRED_TM     = 1
+TCA_MIRRED_PARMS  = 2
 
 #enum {
 #	RTM_NEWACTION	= 48,
