@@ -56,8 +56,10 @@ class Message(object):
     def unpack(cls, msg):
         """Unpack raw bytes into a Netlink message."""
         mlength, type, flags, seq, pid = cls.nlmsghdr.unpack(msg[:cls.nlmsghdr.size])
-        st_cls = ServiceTemplate.select(type)
-        st = st_cls.unpack(msg[cls.nlmsghdr.size:])
+        st = None
+        if msg[cls.nlmsghdr.size:] > 0:
+            st_cls = ServiceTemplate.select(type)
+            st = st_cls.unpack(msg[cls.nlmsghdr.size:])
         return Message(type, flags, seq, service_template=st)
     
     def __init__(self, type, flags=0, seq=-1, service_template=None):
