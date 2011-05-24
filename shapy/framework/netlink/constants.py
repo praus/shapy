@@ -144,7 +144,7 @@ TCA_MIRRED_PARMS  = 2
 
 ### Kernel Ethernet protocol numbers
 # see include/linux/if_ether.h
-ETH_P_IP = 0x0800
+ETH_P_IP = 0x08
 
 #enum {
 #	RTM_NEWACTION	= 48,
