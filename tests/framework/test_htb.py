@@ -30,16 +30,17 @@ class TestHTB(unittest.TestCase, ServerMixin, ClientMixin):
         
         self.filesize = 2**20
         self.randomfile = random_file(self.filesize)
+        self.sleep = 4
         
         self.run_server()
     
     def test_shaping(self):
         time_up, time_down = self.make_transfer()
         
-        eta = self.filesize/(self.client_speed*1024)
-        self.assertAlmostEqual(time_up, eta, delta=1)
+        eta = self.filesize/(self.client_speed*1000)
+        self.assertAlmostEqual(time_up, eta, delta=2)
         
-        eta = self.filesize/(self.server_speed*1024)
+        eta = self.filesize/(self.server_speed*1000)
         self.assertAlmostEqual(time_down, eta, delta=1)
         
     def tearDown(self):

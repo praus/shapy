@@ -102,7 +102,7 @@ class ClientMixin(object):
         rcvd = s.recv(1)
         time_up = total_seconds(datetime.now() - start)
         
-        time.sleep(1) # wait for a bucket to fill again
+        time.sleep(getattr(self, 'sleep', 0)) # wait for a bucket to fill again
         
         ## server -> client
         start = datetime.now()
