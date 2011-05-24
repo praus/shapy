@@ -9,7 +9,10 @@ from shapy.framework.netlink.message import *
 from shapy.framework.netlink.tc import *
 from shapy.framework.netlink.connection import Connection
 from shapy.framework.netlink.netem import *
+from shapy.framework.netlink.filter import *
 from shapy.framework.utils import nl_us2ticks
+
+from tests.utils import *
 
 class TestUnpack(unittest.TestCase):
     def setUp(self):
@@ -65,18 +68,78 @@ class TestUnpack(unittest.TestCase):
         
         ??, flowid, ??, parent, ??, ??, ??, mask, match, prio, ??
         
+        protocol id (IP) (3?)
         offset?
         
         """
         data = "\x5c\x00\x00\x00\x2c\x00\x05\x06\x05\x8e\xce\x4d\x00\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x01\x00\x08\x00\x0d\x00\x08\x00\x01\x00\x75\x33\x32\x00\x30\x00\x02\x00\x08\x00\x01\x00\x03\x00\x01\x00\x24\x00\x05\x00\x01\x00\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xff\xff\xff\xff\x7f\x00\x00\x03\x0c\x00\x00\x00\x00\x00\x00\x00"
         msg = Message.unpack(data)
-        print msg
+        #print msg
+        st = msg.service_template
+        attr = st.attributes
+        #print st
+        #print attr
+        
+        tc_u32_sel = Struct("BBBHHhhI")
+        tc_u32_key = Struct("IIii")
+        nested = list(unpack_attrs(attr[1].payload))
+        #print nested
+        #print "{0:#x}".format(struct.unpack("I", nested[0].payload)[0])
+        sel = tc_u32_sel.unpack(nested[1].payload[:16])
+        key = tc_u32_key.unpack(nested[1].payload[16:])
+        #print [ "{0:#x}".format(a) for a in key ]
+        #print key[1]
+        #print [ "{0:#x}".format(a) for a in struct.unpack("HH10I", attr[1].payload) ]
+        
+        #import pdb; pdb.set_trace()
+    
+    def test_unpack_tcp_filter(self):
+        """
+        tc filter add dev lo parent 1: protocol ip prio 1 u32 \
+        match ip sport 8000 0xffff flowid 1:5
+        """
+        data = "\\\0\0\0,\0\5\6!\201\333M\0\0\0\0\0\0\0\0\1\0\0\0\0\0\0\0\0\0\1\0\10\0\1\0\10\0\1\0u32\0000\0\2\0\10\0\1\0\5\0\1\0$\0\5\0\1\0\1\0\0\0\0\0\0\0\0\0\0\0\0\0\377\377\0\0\37@\0\0\24\0\0\0\0\0\0\0"
+        #data = "\\\0\0\0,\0\5\6\352\210\333M\0\0\0\0\0\0\0\0\1\0\0\0\0\0\0\0\0\0\1\0\10\0\1\0\10\0\1\0u32\0000\0\2\0\10\0\1\0\5\0\1\0$\0\5\0\1\0\1\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\377\377\0\0\37@\24\0\0\0\0\0\0\0"
+        msg = Message.unpack(data)
         st = msg.service_template
         attr = st.attributes
         
-        print [ "{0:#x}".format(a) for a in struct.unpack("11I", attr[1].payload) ]
+        tc_u32_sel = Struct("BBBHHhhI")
+        tc_u32_key = Struct("IIii")
+        nested = list(unpack_attrs(attr[1].payload))
+        sel = tc_u32_sel.unpack(nested[1].payload[:16])
+        key = tc_u32_key.unpack(nested[1].payload[16:])
+        #print sel, key
+        #print hex_list(sel), hex_list(key)
+    
+    def test_unpack_add_redirect_filter(self):
+        """
+        tc filter add dev lo parent 1: protocol ip prio 3 \
+        u32 match ip dst 127.0.0.4 flowid 1:1 \
+        action mirred egress redirect dev ifb0
         
-        #import pdb; pdb.set_trace()
+        filter parent 1: protocol ip pref 3 u32 
+        filter parent 1: protocol ip pref 3 u32 fh 800: ht divisor 1 
+        filter parent 1: protocol ip pref 3 u32 fh 800::800 order 2048 key ht 800 bkt 0 flowid 1:1 
+          match 7f000004/ffffffff at 16
+            action order 1: mirred (Egress Redirect to device ifb0) stolen
+            index 2 ref 1 bind 1
+        """
+        data = "\x94\x00\x00\x00\x2c\x00\x05\x06\x4f\x21\xda\x4d\x00\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x01\x00\x08\x00\x03\x00\x08\x00\x01\x00\x75\x33\x32\x00\x68\x00\x02\x00\x08\x00\x01\x00\x01\x00\x01\x00\x38\x00\x07\x00\x34\x00\x01\x00\x0b\x00\x01\x00\x6d\x69\x72\x72\x65\x64\x00\x00\x24\x00\x02\x00\x20\x00\x02\x00\x00\x00\x00\x00\x00\x00\x00\x00\x04\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x05\x00\x00\x00\x24\x00\x05\x00\x01\x00\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xff\xff\xff\xff\x7f\x00\x00\x04\x10\x00\x00\x00\x00\x00\x00\x00"
+        msg = Message.unpack(data)
+        st = msg.service_template
+        attr = st.attributes
+        
+        tc_u32_sel = Struct("BBBHHhhI")
+        tc_u32_key = Struct("IIii")
+        filter_opt = list(unpack_attrs(attr[1].payload)) # TCA_KIND, TCA_OPTIONS
+        action = list(unpack_attrs(filter_opt[1].payload)) # TCA_EGRESS_REDIR
+        mirred = list(unpack_attrs(action[0].payload)) # TCA_ACT_KIND, TCA_ACT_OPTIONS
+        mirred_parms = list(unpack_attrs(mirred[1].payload))
+        
+        tc_mirred = Struct("IIiiiiI")
+        #print tc_mirred.unpack(mirred_parms[0].payload)
+    
     
     def test_unpack_add_netem(self):
         """tc qdisc add dev lo root handle 1: netem delay 10ms"""
