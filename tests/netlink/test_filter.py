@@ -23,7 +23,7 @@ class TestFilter(TCTestCase):
         self.classid = u32_classid(0x10003)
         
         prio = 13
-        protocol = 8
+        protocol = ETH_P_IP
         self.tcm_info = prio << 16 | protocol
     
     def test_add_filter(self):

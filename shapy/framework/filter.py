@@ -43,7 +43,7 @@ class RedirectFilter(U32Filter):
         U32Filter.__init__(self, match, **kwargs)
         prio = kwargs.get('prio', 2)
         
-        protocol = 8 # IP
+        protocol = ETH_P_IP
         self.tcm_info = prio << 16 | protocol
         
         if_index = get_if_index(ifb)
@@ -58,7 +58,7 @@ class FlowFilter(U32Filter):
     def __init__(self, match, flowid, **kwargs):
         U32Filter.__init__(self, match, **kwargs)
         prio = kwargs.get('prio', 3)
-        protocol = 8
+        protocol = ETH_P_IP
         self.tcm_info = prio << 16 | protocol
         
         flow = u32_classid(convert_handle(flowid))
