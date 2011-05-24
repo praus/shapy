@@ -1,3 +1,5 @@
+VERSION = "1.0"
+
 import sys
 import shapy
 import shapy.framework.settings.default

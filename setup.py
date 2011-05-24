@@ -35,9 +35,12 @@ for dirpath, dirnames, filenames in os.walk(project_dir):
     elif filenames:
         data_files.append([dirpath, [os.path.join(dirpath, f) for f in filenames]])
 
+def get_version():
+    import shapy
+    return shapy.VERSION
 
 setup(name='ShaPy',
-      version='0.1',
+      version=get_version(),
       description='Netlink and network emulation framework',
       author='Petr Praus',
       author_email='petr@praus.net',
