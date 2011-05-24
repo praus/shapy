@@ -63,14 +63,6 @@ class TestUnpack(unittest.TestCase):
         """
         tc filter add dev lo parent 1: protocol ip prio 13 u32 \
         match ip src 127.0.0.3 flowid 1:3
-        
-        ['0x10008', '0x10003', '0x50024', '0x10001', '0x0', '0x0', '0x0', '0xffffffff', '0x300007f', '0xc', '0x0']
-        
-        ??, flowid, ??, parent, ??, ??, ??, mask, match, prio, ??
-        
-        protocol id (IP) (3?)
-        offset?
-        
         """
         data = "\x5c\x00\x00\x00\x2c\x00\x05\x06\x05\x8e\xce\x4d\x00\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x01\x00\x08\x00\x0d\x00\x08\x00\x01\x00\x75\x33\x32\x00\x30\x00\x02\x00\x08\x00\x01\x00\x03\x00\x01\x00\x24\x00\x05\x00\x01\x00\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xff\xff\xff\xff\x7f\x00\x00\x03\x0c\x00\x00\x00\x00\x00\x00\x00"
         msg = Message.unpack(data)
@@ -162,6 +154,20 @@ class TestUnpack(unittest.TestCase):
         self.assertEqual(msg.flags, 0x605)
         self.assertEqual(msg.service_template.attributes[1].payload, data[-24:])
     
+    
+    def test_unpack_get_stats(self):
+        """
+        tc -s class show dev lo classid 1:1
+        """
+        data1 = "\x24\x00\x00\x00\x2a\x00\x01\x03\x22\x08\xdc\x4d\x00\x00\x00\x00"
+        data2 = "\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"
+        
+        nlmsghdr = Struct("IHHII")
+        tcmsg = Struct("BxxxiIII")
+        
+        nlmsghdr.unpack(data1)
+        tcmsg.unpack(data2)
+        
 
 if __name__ == '__main__':
     unittest.main()
