@@ -19,6 +19,11 @@ def validate_ip(addr):
     except socket.error:
         raise ImproperlyConfigured("Invalid IP: %s" % addr)
 
+# http://stackoverflow.com/questions/106179/regular-expression-to-match-hostname-or-ip-address
+valid_IP_pattern = re.compile("^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$")
+def validate_full_ip(ip):
+    return bool(re.match(valid_IP_pattern, ip))
+
 def align(l, alignto=4):
     """Aligned length to nearest multiple of 4."""
     return (l + alignto - 1) & ~(alignto - 1)

@@ -59,6 +59,10 @@ class u32_selector(Attr):
 
 
 class u32_mirred_action(Attr):
+    """
+    The basic action redirecting all matched traffic to the interface specified
+    by ifindex using mirred strategy.
+    """
     # include/linux/tc_act/tc_mirred.h
     ##define tc_gen \
     #    __u32                 index; \

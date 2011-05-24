@@ -39,3 +39,5 @@ def random_file(size):
     with open('/dev/urandom', 'rb') as f:
         return bytearray(f.read(size))
     
+def hex_list(lst):
+    return [ "{0:#x}".format(a) for a in lst ]
