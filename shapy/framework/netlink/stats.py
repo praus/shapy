@@ -40,7 +40,6 @@ def get_stats(if_index, type):
     flags = NLM_F_MULTI
     while flags == NLM_F_MULTI:
         m = conn.recv()
-        print m
         msgs.append(m)
         flags = m.flags
         if m.type == NLMSG_DONE:

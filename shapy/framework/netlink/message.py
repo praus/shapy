@@ -147,7 +147,7 @@ class ACK(ServiceTemplate):
     def is_error(self):
         return bool(self.error_code)
         
-ServiceTemplate.register(ACK, (NLMSG_ERROR,))
+ServiceTemplate.register(ACK, (NLMSG_ERROR, NLMSG_DONE))
 
 class Attr(object):
     """Represents a single attribute."""
