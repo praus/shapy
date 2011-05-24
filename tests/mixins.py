@@ -52,6 +52,8 @@ class ServerMixin(object):
         def run(self):
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+            s.setsockopt(socket.SOL_SOCKET, socket.SO_SNDBUF, 50688) # 49.5 KB
+            s.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, 87380) # 85.3 KB
             s.bind(self.server_addr)
             s.listen(1)
             conn, addr = s.accept()
@@ -88,6 +90,8 @@ class ClientMixin(object):
         # SO_REUSEADDR: http://stackoverflow.com/questions/3229860/what-is-the-meaning-of-so-reuseaddr-setsockopt-option-linux
         s = self.sock_client
         s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        s.setsockopt(socket.SOL_SOCKET, socket.SO_SNDBUF, 50688) # 49.5 KB
+        s.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, 87380) # 85.3 KB
         s.bind(self.client_addr)
         s.connect(self.server_addr)
         start = datetime.now()
