@@ -68,8 +68,10 @@ class Shaper(object):
             
             # Exclude specified ports from shaping altogether
             for port in settings.EMU_NOSHAPE_PORTS:
-                prioq.add(shapy.FlowFilter('sport %s 0xffff' % port, '1:1ff', prio=1))
-                ingressq.add(shapy.FlowFilter('dport %s 0xffff' % port, '1:1ff', prio=1))
+                prioq.add(shapy.FlowFilter('sport %s' % port, '1:1ff',
+                                           mask=0xffff, prio=1))
+                ingressq.add(shapy.FlowFilter('dport %s' % port, '1:1ff',
+                                              mask=0xffff, prio=1))
             
             interface.add(prioq)    
             interface.add_ingress(ingressq) 

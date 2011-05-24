@@ -19,7 +19,8 @@ class NetlinkExecutable(Executable):
         except ValueError:
             parent = TC_H_ROOT
         
-        tcm = tcmsg(socket.AF_UNSPEC, interface.if_index, handle, parent, 0,
+        info = getattr(self, 'tcm_info', 0)
+        tcm = tcmsg(socket.AF_UNSPEC, interface.if_index, handle, parent, info,
                     self.attrs)
         msg = Message(type=self.type,
                       flags=NLM_F_EXCL | NLM_F_CREATE | NLM_F_REQUEST | NLM_F_ACK,
