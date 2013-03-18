@@ -2,3 +2,5 @@
 *.komodoproject
 *.log*
 sudo_password.txt
+.project
+.pydevproject
