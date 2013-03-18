@@ -4,3 +4,7 @@
 sudo_password.txt
 .project
 .pydevproject
+.settings
+/MANIFEST
+/dist
+/build
