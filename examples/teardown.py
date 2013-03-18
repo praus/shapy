@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 import logging
 logging.basicConfig(level=logging.INFO, datefmt='%H:%M:%S',

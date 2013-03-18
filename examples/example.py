@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 import logging
 logging.basicConfig(level=logging.INFO, datefmt='%H:%M:%S',
@@ -9,7 +9,7 @@ register_settings('settings')
 from shapy.emulation.shaper import Shaper
 
 if __name__ == '__main__':
-    ps = {("127.0.0.2",) : {'upload': 1024, 'download': 1024, 'delay': 5},
+    ps = {("127.0.0.2",) : {'upload': 1024, 'download': 1024, 'delay': 5, 'jitter': 5},
           ("127.0.0.3",) : {'upload': 256, 'download': 512, 'delay': 20},
           ("127.0.0.4",) : {'upload': 256, 'download': 512, 'delay': 20},
           }

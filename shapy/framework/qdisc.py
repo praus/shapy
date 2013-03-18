@@ -38,9 +38,9 @@ class IngressQdisc(QdiscClassless):
                 'parent': TC_H_INGRESS}
 
 class NetemDelayQdisc(QdiscClassless):
-    def __init__(self, handle, latency, **kwargs):
+    def __init__(self, handle, latency, jitter, **kwargs):
         self.attrs = [Attr(TCA_KIND, 'netem\0'),
-                      NetemOptions(latency*1000)]
+                      NetemOptions(latency*1000, jitter=jitter*1000)]
         QdiscClassless.__init__(self, handle, **kwargs)
 
 
